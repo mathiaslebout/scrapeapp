@@ -1,0 +1,14 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.image-gallery-image {
+  text-align: center;
+}
+
+.image-gallery-slide img {
+  width: auto;
+  height: 800px;
+}
