@@ -4,11 +4,13 @@ body {
   font-family: sans-serif;
 }
 
-.image-gallery-image {
-  text-align: center;
-}
+@media (min-width: 600px) {
+  .image-gallery-image {
+    text-align: center;
+  }
 
-.image-gallery-slide img {
-  width: auto;
-  height: 800px;
+  .image-gallery-slide img {
+    width: auto;
+    height: 800px;
+  }
 }
