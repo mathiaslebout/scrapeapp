@@ -25,7 +25,11 @@ export default class ProductsGallery extends React.Component {
             {
                 item.description &&
                 <span className='image-gallery-description'>
-                {item.description}
+                    <a 
+                        href={item.href}
+                    >
+                    {item.description}
+                    </a>
                 </span>
             }
         </div>
@@ -40,6 +44,7 @@ export default class ProductsGallery extends React.Component {
                 originalClass: 'featured-slide',
                 thumbnailClass: 'featured-thumb',
                 description: `${product.shop} ${product.description} ${product.price} euro`,
+                href: product.href,
             }
         })
 
@@ -68,7 +73,8 @@ export default class ProductsGallery extends React.Component {
             items={images}
             slideInterval={2000}
             onImageLoad={this.handleImageLoad}
-            // renderItem={this._renderItem.bind(this)}
+            renderItem={this._renderItem.bind(this)}
+            showFullscreenButton={false}
             />
         );        
     }

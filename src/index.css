@@ -4,6 +4,10 @@ body {
   font-family: sans-serif;
 }
 
+a {
+  color: white;
+}
+
 @media (min-width: 600px) {
   .image-gallery-image {
     text-align: center;
