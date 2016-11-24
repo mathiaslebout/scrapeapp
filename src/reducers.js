@@ -3,7 +3,28 @@ import {
   SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS,
   REQUEST_PRODUCTS, RECEIVE_PRODUCTS,
+  SET_CURRENT_PRODUCT, SET_CURRENT_PAGE, INCREMENT_PAGE,
 } from './actions'
+
+function currentProduct(state = 0, action) {
+  switch (action.type) {
+    case SET_CURRENT_PRODUCT:
+      return action.index
+    default:
+      return state
+  }
+}
+
+function currentPage(state = 0, action) {
+  switch (action.type) {
+    case SET_CURRENT_PAGE:
+      return action.page
+    case INCREMENT_PAGE:
+      return action.page + 1 
+    default:
+      return state
+  }
+} 
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -50,7 +71,8 @@ function allProducts(state = {
         case REQUEST_PRODUCTS:
             return Object.assign({}, state, {
                 isFetching: true,
-                didInvalidate: false
+                didInvalidate: false,
+                items: []
             })
         case RECEIVE_PRODUCTS:
             return Object.assign({}, state, {
@@ -90,7 +112,9 @@ function productsByShop(state = {}, action) {
 const rootReducer = combineReducers({
   // postsBySubreddit,
 //   selectedSubreddit,
-  allProducts
+  allProducts,
+  currentProduct,
+  currentPage,
 })
 
 export default rootReducer

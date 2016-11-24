@@ -8,6 +8,31 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 export const REQUEST_PRODUCTS = 'REQUEST_PRODUCTS'
 export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS'
 
+export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
+export const INCREMENT_PAGE = 'INCREMENT_PAGE'
+
+export function setCurrentProduct(index) {
+  return {
+    type: SET_CURRENT_PRODUCT,
+    index
+  }
+}
+
+export function setCurrentPage(page) {
+  return {
+    type: SET_CURRENT_PAGE,
+    page
+  }
+}
+
+export function incrementPage(page) {
+  return {
+    type: INCREMENT_PAGE,
+    page
+  }
+}
+
 export function selectSubreddit(subreddit) {
   return {
     type: SELECT_SUBREDDIT,
@@ -45,10 +70,10 @@ function receivePosts(subreddit, json) {
   }
 }
 
-function receiveProducts(json) {
+function receiveProducts(json, products) {
     return {
         type: RECEIVE_PRODUCTS,
-        products: json,
+        products:  products.concat( json ),
         receivedAt: Date.now()
     }
 }
@@ -62,10 +87,10 @@ function fetchPosts(subreddit) {
   }
 }
 
-function fetchProducts() {
+function fetchProducts(state) {
     return dispatch => {
         dispatch(requestProducts()) 
-        return fetch('http://localhost:8082/store', {
+        return fetch('http://localhost:8082/store/' + state.currentPage, {
                 // mode: 'no-cors', 
                 // headers: {
                 //     'Accept': 'application/json',
@@ -73,7 +98,7 @@ function fetchProducts() {
                 // }
             })
             .then(response => response.json())
-            .then(json => dispatch(receiveProducts(json)))
+            .then(json => dispatch(receiveProducts(json, state.allProducts.items)))
     }
 }
 
@@ -88,10 +113,13 @@ function shouldFetchPosts(state, subreddit) {
   }
 }
 
-function shouldFetchProducts(state) {
+function shouldFetchProducts(dispatch, state) {
     const products = state.allProducts
     if (!products || !products.items || products.items.length === 0) {
         return true
+    } else if (products.items.length == state.currentProduct + 5) {
+        dispatch(incrementPage(state.currentPage))
+        return true        
     } else if (products.isFetching) {
         return false
     } else {
@@ -109,8 +137,8 @@ export function fetchPostsIfNeeded(subreddit) {
 
 export function fetchProductsIfNeeded() {
     return (dispatch, getState) => {
-        if (shouldFetchProducts(getState())) {
-            return dispatch(fetchProducts())
+        if (shouldFetchProducts(dispatch, getState())) {
+            return dispatch(fetchProducts(getState()))
         }
     }
 }

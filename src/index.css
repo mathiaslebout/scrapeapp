@@ -15,6 +15,6 @@ a {
 
   .image-gallery-slide img {
     width: auto;
-    height: 800px;
+    height: 100vh;
   }
 }

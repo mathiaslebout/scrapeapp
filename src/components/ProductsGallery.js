@@ -1,14 +1,25 @@
 import React, { PropTypes, Component } from 'react'
 import ImageGallery from 'react-image-gallery'
+import { setCurrentProduct, fetchProductsIfNeeded } from '../actions'
+import { connect } from 'react-redux'
 
-export default class ProductsGallery extends React.Component {
+class ProductsGallery extends React.Component {
+    constructor(props) {
+        super(props)
+    }
 
     handleImageLoad(event) {
         console.log('Image loaded ', event.target)
     }
 
+    componentDidMount() {
+        const { dispatch, currentProduct } = this.props
+    }    
+
     _renderItem(item) {
         const onImageError = this.props.onImageError || this._handleImageError
+
+        // this.props.dispatch(setCurrentProduct(item.index))
 
         return (
             <div className='image-gallery-image'>
@@ -36,14 +47,20 @@ export default class ProductsGallery extends React.Component {
         )
     }    
 
+    _onSlide(index) {
+        this.props.dispatch(setCurrentProduct(index))
+        this.props.dispatch(fetchProductsIfNeeded())
+    }
+
     render() {
         const images = this.props.products.map((product, i) => {
             return {
+                index: i,
                 original: product.imgHref,
                 thumbnail: product.imgHref,
                 originalClass: 'featured-slide',
                 thumbnailClass: 'featured-thumb',
-                description: `${product.shop} ${product.description} ${product.price} euro`,
+                description: `${product.description}`,
                 href: product.href,
             }
         })
@@ -75,11 +92,30 @@ export default class ProductsGallery extends React.Component {
             onImageLoad={this.handleImageLoad}
             renderItem={this._renderItem.bind(this)}
             showFullscreenButton={false}
+            onSlide={this._onSlide.bind(this)}
+            startIndex={this.props.startIndex}
+            lazyLoad={true}
+            showNav={true}
+            showThumbnails={false}
+            showPlayButton={false}
             />
         );        
     }
 }
 
 ProductsGallery.propTypes = {
-  products: PropTypes.array.isRequired
+    startIndex: PropTypes.number,
+    products: PropTypes.array.isRequired
 }
+
+function mapStateToProps(state) {
+    const startIndex = state.currentProduct
+    const products = state.allProducts.items
+
+    return {
+        startIndex,
+        products
+    }
+}
+
+export default connect(mapStateToProps)(ProductsGallery)
