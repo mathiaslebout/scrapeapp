@@ -8,6 +8,7 @@ a {
   color: white;
 }
 
+/*
 @media (min-width: 600px) {
   .image-gallery-image {
     text-align: center;
@@ -17,4 +18,17 @@ a {
     width: auto;
     height: 100vh;
   }
+}
+*/
+
+.image-gallery-image {
+  /*text-align: center;*/
+  display: flex;
+  justify-content: center;  
+}
+
+.image-gallery-slide img {
+  width: auto;
+  height: 100vh;
+  flex: none;
 }
