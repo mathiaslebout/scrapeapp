@@ -4,6 +4,7 @@ import {
   REQUEST_POSTS, RECEIVE_POSTS,
   REQUEST_PRODUCTS, RECEIVE_PRODUCTS,
   SET_CURRENT_PRODUCT, SET_CURRENT_PAGE, INCREMENT_PAGE,
+  SIGNIN, SIGNED
 } from './actions'
 
 function currentProduct(state = 0, action) {
@@ -25,6 +26,24 @@ function currentPage(state = 0, action) {
       return state
   }
 } 
+
+function signin(state = false, action) {
+  switch (action.type) {
+    case SIGNIN:
+      return !state
+    default:
+      return state
+  }
+}
+
+function signed(state = false, action) {
+  switch (action.type) {
+    case SIGNED:
+      return !state
+    default:
+      return state
+  }
+}
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -115,6 +134,8 @@ const rootReducer = combineReducers({
   allProducts,
   currentProduct,
   currentPage,
+  signin,
+  signed,
 })
 
 export default rootReducer

@@ -12,6 +12,9 @@ export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 export const INCREMENT_PAGE = 'INCREMENT_PAGE'
 
+export const SIGNIN = 'SIGNIN'
+export const SIGNED = 'SIGNED'
+
 export function setCurrentProduct(index) {
   return {
     type: SET_CURRENT_PRODUCT,
@@ -30,6 +33,18 @@ export function incrementPage(page) {
   return {
     type: INCREMENT_PAGE,
     page
+  }
+}
+
+export function signin() {
+  return {
+    type: SIGNIN    
+  }
+}
+
+export function signed() {
+  return {
+    type: SIGNED
   }
 }
 
