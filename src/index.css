@@ -33,6 +33,10 @@ a {
   flex: none;
 }
 
+.image-gallery-slide .image-gallery-description {
+  line-height: 1.5;
+}
+
 .signin {
   position: absolute;
   top: 10px;
@@ -50,14 +54,20 @@ a {
 
 .signin-panel {
   position: absolute;
-  width: 90vw;
-  height: 95vh;
+  width: 100vw;
+  height: 100vh;
   background-color: darkgrey;
   opacity: 0.9;
-  top: 2.5vh;
-  left: 5vw;  
-  border-radius: 10px;
+  /*top: 2.5vh;*/
+  /*left: 5vw;  */
+  /*border-radius: 10px;*/
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.signin-panel-close {
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }

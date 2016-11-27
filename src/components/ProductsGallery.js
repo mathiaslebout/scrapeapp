@@ -21,7 +21,7 @@ class ProductsGallery extends React.Component {
             'scope': 'profile email',
             'width': 250,
             'height': 50,
-            'longtitle': false,
+            'longtitle': true,
             'theme': 'light',   // 'dark'
             'onsuccess': this.responseGoogle.bind(this),
             'onfailure': this.responseGoogle.bind(this)
@@ -33,7 +33,9 @@ class ProductsGallery extends React.Component {
         if (this.props.signin) {
             this.props.dispatch(signin())
         }
-        this.props.dispatch(signed())
+        if (!this.props.signed) {
+            this.props.dispatch(signed())
+        }
     }
 
     _renderItem(item) {
@@ -55,11 +57,21 @@ class ProductsGallery extends React.Component {
                 // product description
                 item.description &&
                 <span className='image-gallery-description'>
-                    <a 
-                        href={item.href}
-                    >
-                    {item.description}
+                    <a href={item.href}>
+                        {item.description}
                     </a>
+                    {
+                        this.props.signed &&
+                        <div>
+                            Taglie: {item.sizes.join(',')}
+                        </div>
+                    }
+                    {
+                        this.props.signed &&
+                        <div>
+                            Prezzo: {item.price} euro
+                        </div>
+                    }
                 </span>
             }
         </div>
@@ -101,6 +113,8 @@ class ProductsGallery extends React.Component {
                 thumbnailClass: 'featured-thumb',
                 description: `${product.description}`,
                 href: product.href,
+                price: product.price,
+                sizes: product.sizes,
                 // onSignIn
             }
         })
@@ -163,8 +177,18 @@ class ProductsGallery extends React.Component {
             // this.props.signin &&
             <span 
                 className="signin-panel-background"
-                style={signinStyle}>
+                style={signinStyle}
+                >
                 <span className="signin-panel">
+                    {
+                    <div className="signin-panel-close">
+                        <i 
+                            className="fa fa-window-close-o fa-3x" 
+                            aria-hidden="true"
+                            onClick={this._onSignIn.bind(this)} 
+                            />
+                    </div>
+                    }
                     <div className="signin-google">
                     {
                         <div id="my-signin2" />
