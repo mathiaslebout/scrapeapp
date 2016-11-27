@@ -47,7 +47,7 @@ class AsyncApp extends Component {
     // const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     const { products, isFetching, lastUpdated} = this.props
     return (
-      <div>
+      <div className="app-loader">
       {/*
         <Picker value={selectedSubreddit}
                 onChange={this.handleChange}
@@ -67,13 +67,18 @@ class AsyncApp extends Component {
           }
         </p>
         */}        
-        {isFetching && products.length === 0 &&
-          <h2>Loading...</h2>
+        {
+          isFetching && products.length === 0 &&
+          <span className="loading-spinner">
+            <i className="fa fa-spinner fa-spin fa-5x fa-fw"></i>
+          </span>
         }
-        {!isFetching && products.length === 0 &&
+        {
+          !isFetching && products.length === 0 &&
           <h2>Empty.</h2>
         }
-        {products.length > 0 && 
+        {
+          products.length > 0 && 
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <ProductsGallery products={products} />
           </div>

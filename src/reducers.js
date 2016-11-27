@@ -7,6 +7,28 @@ import {
   SIGNIN, SIGNED
 } from './actions'
 
+function user(state = {
+  isSigning: false,
+  isSigned: false,
+  type: null,
+  info: null
+}, action) {
+  switch (action.type) {
+    case SIGNIN:
+      return Object.assign({}, state, {
+        isSigning: action.signin,
+        isSigned: false
+      })
+    case SIGNED:
+      return Object.assign({}, state, {
+        isSigned: action.signed,
+        isSigning: false
+      })
+    default:
+      return state
+  }
+}
+
 function currentProduct(state = 0, action) {
   switch (action.type) {
     case SET_CURRENT_PRODUCT:
@@ -27,23 +49,23 @@ function currentPage(state = 0, action) {
   }
 } 
 
-function signin(state = false, action) {
-  switch (action.type) {
-    case SIGNIN:
-      return !state
-    default:
-      return state
-  }
-}
+// function signin(state = false, action) {
+//   switch (action.type) {
+//     case SIGNIN:
+//       return !state
+//     default:
+//       return state
+//   }
+// }
 
-function signed(state = false, action) {
-  switch (action.type) {
-    case SIGNED:
-      return !state
-    default:
-      return state
-  }
-}
+// function signed(state = false, action) {
+//   switch (action.type) {
+//     case SIGNED:
+//       return !state
+//     default:
+//       return state
+//   }
+// }
 
 function selectedSubreddit(state = 'reactjs', action) {
   switch (action.type) {
@@ -134,8 +156,9 @@ const rootReducer = combineReducers({
   allProducts,
   currentProduct,
   currentPage,
-  signin,
-  signed,
+  user,
+  // signin,
+  // signed,
 })
 
 export default rootReducer

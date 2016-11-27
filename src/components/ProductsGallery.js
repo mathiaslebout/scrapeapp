@@ -4,6 +4,9 @@ import ImageGallery from 'react-image-gallery'
 import { setCurrentProduct, fetchProductsIfNeeded, signin, signed } from '../actions'
 import { connect } from 'react-redux'
 
+// flexbox
+// https://philipwalton.github.io/solved-by-flexbox/
+
 
 class ProductsGallery extends React.Component {
     constructor(props) {
@@ -30,12 +33,7 @@ class ProductsGallery extends React.Component {
 
     responseGoogle(response) {
         console.log(response);
-        if (this.props.signin) {
-            this.props.dispatch(signin())
-        }
-        if (!this.props.signed) {
-            this.props.dispatch(signed())
-        }
+        this.props.dispatch(signed(true))
     }
 
     _renderItem(item) {
@@ -83,14 +81,13 @@ class ProductsGallery extends React.Component {
         this.props.dispatch(fetchProductsIfNeeded())
     }
 
-    _onSigned() {
-        this.props.dispatch(signin())
-        this.props.dispatch(signed())
+
+    _onCloseSignIn() {
+        this.props.dispatch(signin(false))
     }
 
     _onSignIn() {
-        // console.log('Signing in...')
-        this.props.dispatch(signin())
+        this.props.dispatch(signin(true))
     }
 
     _onSignOut() {
@@ -98,7 +95,7 @@ class ProductsGallery extends React.Component {
         const auth2 = window.gapi.auth2.getAuthInstance();
         auth2.signOut().then(function () {
             console.log('User signed out.')
-            this.props.dispatch(signed())
+            this.props.dispatch(signed(false))
         }.bind(this))
     }
 
@@ -138,10 +135,8 @@ class ProductsGallery extends React.Component {
     //     thumbnail: 'http://lorempixel.com/250/150/nature/3/'        
     // }]
 
-    const signinDisplay = this.props.signin ? 'inherit' : 'none'
     const signinStyle = {
-        'display': signinDisplay,
-        // 'z-index': this.props.signin ? 3 : 0 
+        'display': this.props.signing ? 'inherit' : 'none',
     }
 
     const signClass = this.props.signed ? 'fa fa-sign-out fa-3x' : 'fa fa-sign-in fa-3x' 
@@ -156,13 +151,11 @@ class ProductsGallery extends React.Component {
                 renderItem={this._renderItem.bind(this)}
                 showFullscreenButton={false}
                 onSlide={this._onSlide.bind(this)}
-                // onSignIn={this._onSignIn.bind(this)}
                 startIndex={this.props.startIndex}
                 lazyLoad={true}
                 showNav={true}
                 showThumbnails={false}
                 showPlayButton={false}
-                // signin={this.props.signin}
                 />
         { 
             // signin icon t
@@ -174,7 +167,6 @@ class ProductsGallery extends React.Component {
             </span>
         }
         {
-            // this.props.signin &&
             <span 
                 className="signin-panel-background"
                 style={signinStyle}
@@ -185,24 +177,24 @@ class ProductsGallery extends React.Component {
                         <i 
                             className="fa fa-window-close-o fa-3x" 
                             aria-hidden="true"
-                            onClick={this._onSignIn.bind(this)} 
+                            onClick={this._onCloseSignIn.bind(this)} 
                             />
                     </div>
                     }
                     <div className="signin-google">
                     {
+                        // https://developers.google.com/identity/sign-in/web/
+                        // this is the placeholder for the Google login button
                         <div id="my-signin2" />
-                        // <GoogleLogin
-                        //     className="g-signin2"
-                        //     // data-width="300" data-height="200" data-longtitle="true"
-                        //     clientId="940726012646-uesv36pb2rud8kj908oaj7ll5e5qee50.apps.googleusercontent.com"
-                        //     // buttonText="Login"
-                        //     data-onsuccess={this.responseGoogle.bind(this)}
-                        //     onSuccess={this.responseGoogle.bind(this)}
-                        //     onFailure={this.responseGoogle.bind(this)}
-                        // />
                     }
-                    </div>                    
+                    </div>             
+                    <div className="signin-facebook">
+                        <div className="fb-login-button" 
+                            data-max-rows="1" 
+                            data-size="xlarge" 
+                            data-show-faces="false" 
+                            data-auto-logout-link="false" />
+                    </div>
                 </span>
             </span>
         }
@@ -220,13 +212,13 @@ ProductsGallery.propTypes = {
 function mapStateToProps(state) {
     const startIndex = state.currentProduct
     const products = state.allProducts.items
-    const signin = state.signin
-    const signed = state.signed
+    const signing = state.user.isSigning
+    const signed = state.user.isSigned
 
     return {
         startIndex,
         products,
-        signin,
+        signing,
         signed
     }
 }

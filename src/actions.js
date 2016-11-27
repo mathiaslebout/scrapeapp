@@ -36,15 +36,17 @@ export function incrementPage(page) {
   }
 }
 
-export function signin() {
+export function signin(signin) {
   return {
-    type: SIGNIN    
+    type: SIGNIN,
+    signin
   }
 }
 
-export function signed() {
+export function signed(signed) {
   return {
-    type: SIGNED
+    type: SIGNED,
+    signed
   }
 }
 
