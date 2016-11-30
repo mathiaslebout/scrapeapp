@@ -19,22 +19,7 @@ class ProductsGallery extends React.Component {
 
     componentDidMount() {
         const { dispatch, currentProduct } = this.props
-
-        window.gapi.signin2.render('my-signin2', {
-            'scope': 'profile email',
-            'width': 250,
-            'height': 50,
-            'longtitle': true,
-            'theme': 'light',   // 'dark'
-            'onsuccess': this.responseGoogle.bind(this),
-            'onfailure': this.responseGoogle.bind(this)
-        });        
     }    
-
-    responseGoogle(response) {
-        console.log(response);
-        this.props.dispatch(signed(true))
-    }
 
     _renderItem(item) {
         const onImageError = this.props.onImageError || this._handleImageError
@@ -81,24 +66,6 @@ class ProductsGallery extends React.Component {
         this.props.dispatch(fetchProductsIfNeeded())
     }
 
-
-    _onCloseSignIn() {
-        this.props.dispatch(signin(false))
-    }
-
-    _onSignIn() {
-        this.props.dispatch(signin(true))
-    }
-
-    _onSignOut() {
-        // console.log('Signing out...')
-        const auth2 = window.gapi.auth2.getAuthInstance();
-        auth2.signOut().then(function () {
-            console.log('User signed out.')
-            this.props.dispatch(signed(false))
-        }.bind(this))
-    }
-
     render() {
         // const onSignIn = this._onSignIn.bind(this)
         const images = this.props.products.map((product, i) => {
@@ -135,71 +102,21 @@ class ProductsGallery extends React.Component {
     //     thumbnail: 'http://lorempixel.com/250/150/nature/3/'        
     // }]
 
-    const signinStyle = {
-        'display': this.props.signing ? 'inherit' : 'none',
-    }
-
-    const signClass = this.props.signed ? 'fa fa-sign-out fa-3x' : 'fa fa-sign-in fa-3x' 
-
     return (
-        <div>
-            <ImageGallery
-                ref={i => this._imageGallery = i}
-                items={images}
-                slideInterval={2000}
-                onImageLoad={this.handleImageLoad}
-                renderItem={this._renderItem.bind(this)}
-                showFullscreenButton={false}
-                onSlide={this._onSlide.bind(this)}
-                startIndex={this.props.startIndex}
-                lazyLoad={true}
-                showNav={true}
-                showThumbnails={false}
-                showPlayButton={false}
-                />
-        { 
-            // signin icon t
-            <span className='signin'>
-                <i 
-                    className={signClass}
-                    aria-hidden='true' 
-                    onClick={this.props.signed ? this._onSignOut.bind(this) : this._onSignIn.bind(this)}/>
-            </span>
-        }
-        {
-            <span 
-                className="signin-panel-background"
-                style={signinStyle}
-                >
-                <span className="signin-panel">
-                    {
-                    <div className="signin-panel-close">
-                        <i 
-                            className="fa fa-window-close-o fa-3x" 
-                            aria-hidden="true"
-                            onClick={this._onCloseSignIn.bind(this)} 
-                            />
-                    </div>
-                    }
-                    <div className="signin-google">
-                    {
-                        // https://developers.google.com/identity/sign-in/web/
-                        // this is the placeholder for the Google login button
-                        <div id="my-signin2" />
-                    }
-                    </div>             
-                    <div className="signin-facebook">
-                        <div className="fb-login-button" 
-                            data-max-rows="1" 
-                            data-size="xlarge" 
-                            data-show-faces="false" 
-                            data-auto-logout-link="false" />
-                    </div>
-                </span>
-            </span>
-        }
-            
-        </div>            
+        <ImageGallery
+            ref={i => this._imageGallery = i}
+            items={images}
+            slideInterval={2000}
+            onImageLoad={this.handleImageLoad}
+            renderItem={this._renderItem.bind(this)}
+            showFullscreenButton={false}
+            onSlide={this._onSlide.bind(this)}
+            startIndex={this.props.startIndex}
+            lazyLoad={true}
+            showNav={true}
+            showThumbnails={false}
+            showPlayButton={false}
+            />            
         );        
     }
 }
@@ -209,7 +126,7 @@ ProductsGallery.propTypes = {
     products: PropTypes.array.isRequired
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
     const startIndex = state.currentProduct
     const products = state.allProducts.items
     const signing = state.user.isSigning

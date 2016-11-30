@@ -108,8 +108,8 @@ function fetchProducts(state) {
     return dispatch => {
         dispatch(requestProducts()) 
 
-        return fetch('http://54.190.34.87:8082/store/' + state.currentPage, {
-        // return fetch('http://localhost:8082/store/' + state.currentPage, {
+        // return fetch('http://54.190.34.87:8082/store/' + state.currentPage, {
+        return fetch('http://localhost:8082/store/' + state.currentPage, {
                 // mode: 'no-cors', 
                 // headers: {
                 //     'Accept': 'application/json',

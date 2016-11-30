@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit, fetchProductsIfNeeded } from '../actions'
+import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit, fetchProductsIfNeeded, signin, signed } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 import Products from '../components/Products'
 import ProductsGallery from '../components/ProductsGallery'
+import Signin from '../components/Signin'
 
 import "../../node_modules/react-image-gallery/styles/css/image-gallery.css";
 
@@ -19,6 +20,7 @@ class AsyncApp extends Component {
     // const { dispatch, selectedSubreddit, } = this.props
     const { dispatch } = this.props
     // dispatch(fetchPostsIfNeeded(selectedSubreddit))
+
     dispatch(fetchProductsIfNeeded())
   }
 
@@ -43,9 +45,32 @@ class AsyncApp extends Component {
   //   dispatch(fetchPostsIfNeeded(selectedSubreddit))
   // }
 
+  _onSignIn() {
+    this.props.dispatch(signin(true))
+  }
+
+  _onSignOut() {
+    // console.log('Signing out...')
+    // sign out from Google
+    const auth2 = window.gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User logged out from Google')
+      this.props.dispatch(signed(false))
+    }.bind(this))
+
+    // sign out from Facebook
+    window.FB.logout(function(response) {
+      // user is now logged out
+      console.log('User logged out from Facebook')
+      this.props.dispatch(signed(false))
+    }.bind(this));    
+  }
+
   render() {
     // const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     const { products, isFetching, lastUpdated} = this.props
+    const signClass = this.props.signed ? 'fa fa-sign-out fa-3x' : 'fa fa-sign-in fa-3x' 
+
     return (
       <div className="app-loader">
       {/*
@@ -68,26 +93,41 @@ class AsyncApp extends Component {
         </p>
         */}        
         {
+          // loading 
           isFetching && products.length === 0 &&
           <span className="loading-spinner">
             <i className="fa fa-spinner fa-spin fa-5x fa-fw"></i>
           </span>
         }
         {
+          // no products in the store
           !isFetching && products.length === 0 &&
           <h2>Empty.</h2>
         }
         {
+          // products gallery
           products.length > 0 && 
           <div style={{ opacity: isFetching ? 0.5 : 1 }}>
             <ProductsGallery products={products} />
           </div>
         }
+        { 
+          // signin or signout button
+          <span className='signin'>
+              <i 
+                  className={signClass}
+                  aria-hidden='true' 
+                  onClick={this.props.signed ? this._onSignOut.bind(this) : this._onSignIn.bind(this)}/>
+          </span>
+        }
+        {
+          <Signin/>
+        }
+        
       </div>
     )
   }
 }
-
 
 AsyncApp.propTypes = {
   // selectedSubreddit: PropTypes.string.isRequired,
@@ -98,7 +138,7 @@ AsyncApp.propTypes = {
   dispatch: PropTypes.func.isRequired
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state) => {
   // const { selectedSubreddit, postsBySubreddit } = state
 
   // allProducts is a Redux reducer defined in reducers.js
@@ -109,22 +149,17 @@ function mapStateToProps(state) {
     items: products,
   } = allProducts || {
     isFetching: true,
-    items: [],
+    items: []    
   }
-  // const {
-  //   isFetching,
-  //   lastUpdated,
-  //   items: products
-  // } = productsByShop || {
-  //   isFetching: true,
-  //   items: []
-  // }
+
+  const signed = state.user.isSigned
 
   return {
     // selectedSubreddit,
     products,
     isFetching,
-    lastUpdated
+    lastUpdated,
+    signed,
   }
 }
 
