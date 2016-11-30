@@ -51,19 +51,28 @@ class AsyncApp extends Component {
 
   _onSignOut() {
     // console.log('Signing out...')
-    // sign out from Google
-    const auth2 = window.gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User logged out from Google')
-      this.props.dispatch(signed(false))
-    }.bind(this))
+    switch (this.props.auth) {
+    case 'google':
+      // sign out from Google
+      const auth2 = window.gapi.auth2.getAuthInstance();
+      auth2.signOut().then(function () {
+        console.log('User logged out from Google')
+        this.props.dispatch(signed(false))
+      }.bind(this))
+      break
 
-    // sign out from Facebook
-    window.FB.logout(function(response) {
-      // user is now logged out
-      console.log('User logged out from Facebook')
-      this.props.dispatch(signed(false))
-    }.bind(this));    
+    case 'facebook': 
+      // sign out from Facebook
+      window.FB.logout(function(response) {
+        // user is now logged out
+        console.log('User logged out from Facebook')
+        this.props.dispatch(signed(false))
+      }.bind(this))
+      break
+
+    default:
+      break
+    }    
   }
 
   render() {
@@ -153,6 +162,7 @@ const mapStateToProps = (state) => {
   }
 
   const signed = state.user.isSigned
+  const auth = state.user.auth
 
   return {
     // selectedSubreddit,
@@ -160,6 +170,7 @@ const mapStateToProps = (state) => {
     isFetching,
     lastUpdated,
     signed,
+    auth,
   }
 }
 

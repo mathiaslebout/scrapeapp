@@ -10,19 +10,23 @@ import {
 function user(state = {
   isSigning: false,
   isSigned: false,
-  type: null,
+  auth: null,
   info: null
 }, action) {
   switch (action.type) {
     case SIGNIN:
       return Object.assign({}, state, {
         isSigning: action.signin,
-        isSigned: false
+        isSigned: false,
+        auth: null,
+        info: null,
       })
     case SIGNED:
       return Object.assign({}, state, {
         isSigned: action.signed,
-        isSigning: false
+        isSigning: false,
+        auth: action.auth,
+        info: action.info,
       })
     default:
       return state

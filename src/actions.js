@@ -43,10 +43,12 @@ export function signin(signin) {
   }
 }
 
-export function signed(signed) {
+export function signed(signinfo) {
   return {
     type: SIGNED,
-    signed
+    signed: signinfo.signed,
+    auth: signinfo.auth,
+    info: signinfo.info
   }
 }
 
@@ -108,7 +110,6 @@ function fetchProducts(state) {
     return dispatch => {
         dispatch(requestProducts()) 
 
-        // return fetch('http://54.190.34.87:8082/store/' + state.currentPage, {
         // return fetch('http://localhost:8082/store/' + state.currentPage, {
         return fetch('http://35.164.227.19:8082/store/' + state.currentPage, {                    
                 // mode: 'no-cors', 

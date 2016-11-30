@@ -35,17 +35,18 @@ class Signin extends Component {
     }
     
     onGoogleSuccess(googleUser) {
-        // console.log(response)
-
         const profile = googleUser.getBasicProfile()
-        // console.log(profile)
 
-        console.log('ID: ' + profile.getId()) // Do not send to your backend! Use an ID token instead.
-        console.log('Name: ' + profile.getName())
-        console.log('Image URL: ' + profile.getImageUrl())
-        console.log('Email: ' + profile.getEmail())  
-
-        this.props.dispatch(signed(true))
+        this.props.dispatch(signed({
+            signed: true,
+            auth: 'google',
+            info: {
+                id: profile.getId(),            // Do not send to your backend! Use an ID token instead.
+                name: profile.getName(),
+                image: profile.getImageUrl(),
+                email: profile.getEmail()
+            }
+        }))
     }
 
     onGoogleFailure(response) {
@@ -66,8 +67,19 @@ class Signin extends Component {
         // Full docs on the response object can be found in the documentation
         // for FB.getLoginStatus().
         if (response.status === 'connected') {
-             // Logged into your app and Facebook
-             this.props.dispatch(signed(true))
+            window.FB.api('/Me', function(response) {
+                // Logged into your app and Facebook
+                this.props.dispatch(signed({
+                    signed: true,
+                    auth: 'facebook',
+                    info: {
+                        id: response.id, 
+                        name: response.name
+                        // image: 
+                        // email: 
+                    }
+                }))
+            }.bind(this))
 
         } else if (response.status === 'not_authorized') {
              // The person is logged into Facebook, but not your app

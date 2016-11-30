@@ -46,9 +46,12 @@ a {
 
 .signin {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 0px;
+  right: 0px;
   z-index: 3;
+  color: #FFFFFF;
+  padding: 5px 10px 5px 10px;
+  background: rgba(0, 0, 0, 0.4);
 }
 
 .signin-panel-background {
@@ -63,11 +66,8 @@ a {
   position: absolute;
   width: 100vw;
   height: 100vh;
-  background-color: darkgrey;
+  background-color: rgba(0, 0, 0, 0.4);
   opacity: 0.9;
-  /*top: 2.5vh;*/
-  /*left: 5vw;  */
-  /*border-radius: 10px;*/
   display: flex;
   justify-content: center;
   align-items: center;
@@ -76,8 +76,10 @@ a {
 
 .signin-panel-close {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 0px;
+  left: 0px;
+  color: #FFFFFF;
+  padding: 5px 10px 5px 10px;
 }
 
 .signin-google {
