@@ -7,13 +7,23 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 
 export const REQUEST_PRODUCTS = 'REQUEST_PRODUCTS'
 export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS'
+export const INVALIDATE_PRODUCTS = 'INVALIDATE_PRODUCTS'
 
 export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 export const INCREMENT_PAGE = 'INCREMENT_PAGE'
 
+export const SET_CURRENT_COLOR = 'SET_CURRENT_COLOR'
+
 export const SIGNIN = 'SIGNIN'
 export const SIGNED = 'SIGNED'
+
+export function setCurrentColor(color) {
+  return {
+    type: SET_CURRENT_COLOR,
+    color
+  }
+}
 
 export function setCurrentProduct(index) {
   return {
@@ -66,6 +76,12 @@ export function invalidateSubreddit(subreddit) {
   }
 }
 
+export function invalidateProducts() {
+  return {
+    type: INVALIDATE_PRODUCTS
+  }
+}
+
 function requestPosts(subreddit) {
   return {
     type: REQUEST_POSTS,
@@ -110,8 +126,8 @@ function fetchProducts(state) {
     return dispatch => {
         dispatch(requestProducts()) 
 
-        // return fetch('http://localhost:8082/store/' + state.currentPage, {
-        return fetch('http://35.164.227.19:8082/store/' + state.currentPage, {                    
+        let baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
+        return fetch(`${baseUrl}/store/${state.currentPage}`, {                    
                 // mode: 'no-cors', 
                 // headers: {
                 //     'Accept': 'application/json',
@@ -119,8 +135,21 @@ function fetchProducts(state) {
                 // }
             })
             .then(response => response.json())
-            .then(json => dispatch(receiveProducts(json, state.allProducts.items)))
+            .then(json => {
+              dispatch(receiveProducts(json, state.allProducts.didInvalidate ? [] : state.allProducts.items))
+            })
     }
+}
+
+function fetchProductsByColor(state) {
+  return dispatch => {
+    dispatch(requestProducts())
+
+    let baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
+    return fetch(`${baseUrl}/store/color/${state.selectedColor.substring(1)}`, )
+      .then(response => response.json())
+      .then(json => dispatch(receiveProducts(json, [])))
+  }
 }
 
 function shouldFetchPosts(state, subreddit) {
@@ -136,7 +165,9 @@ function shouldFetchPosts(state, subreddit) {
 
 function shouldFetchProducts(dispatch, state) {
     const products = state.allProducts
-    if (!products || !products.items || products.items.length === 0) {
+    if (state.selectedColor) {
+      return false      
+    } if (!products || !products.items || products.items.length === 0) {
         return true
     } else if (products.items.length == state.currentProduct + 5) {
         dispatch(incrementPage(state.currentPage))
@@ -155,6 +186,13 @@ export function fetchPostsIfNeeded(subreddit) {
     }
   }
 }
+
+export function fetchProductsBC() {
+  return (dispatch, getState) => {
+    return dispatch(fetchProductsByColor(getState()))
+  }
+}
+
 
 export function fetchProductsIfNeeded() {
     return (dispatch, getState) => {

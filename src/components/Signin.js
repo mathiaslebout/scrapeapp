@@ -83,12 +83,12 @@ class Signin extends Component {
 
         } else if (response.status === 'not_authorized') {
              // The person is logged into Facebook, but not your app
-             this.props.dispatch(signed(false))
+            //  this.props.dispatch(signed(false))
 
         } else {
             // The person is not logged into Facebook, so we're not sure if
             // they are logged into this app or not.
-             this.props.dispatch(signed(false))
+            //  this.props.dispatch(signed(false))
         }
     }    
 
@@ -110,7 +110,7 @@ class Signin extends Component {
                   {
                   <div className="signin-panel-close">
                       <i 
-                          className="fa fa-window-close-o fa-3x" 
+                          className="fa fa-window-close-o fa-2x" 
                           aria-hidden="true"
                           onClick={this._onCloseSignIn.bind(this)} 
                           />

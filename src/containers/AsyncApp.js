@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit, fetchProductsIfNeeded, signin, signed } from '../actions'
+import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit, fetchProductsIfNeeded, fetchProductsBC, signin, signed } from '../actions'
 import Picker from '../components/Picker'
 import Posts from '../components/Posts'
 import Products from '../components/Products'
@@ -25,6 +25,10 @@ class AsyncApp extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.selectedColor != this.props.selectedColor) {
+      const { dispatch, selectedColor } = nextProps
+      selectedColor ? dispatch(fetchProductsBC()) : dispatch(fetchProductsIfNeeded())
+    }
     // if (nextProps.selectedSubreddit !== this.props.selectedSubreddit) {
       // const { dispatch, selectedSubreddit } = nextProps
       // const { dispatch } = nextProps
@@ -78,7 +82,7 @@ class AsyncApp extends Component {
   render() {
     // const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     const { products, isFetching, lastUpdated} = this.props
-    const signClass = this.props.signed ? 'fa fa-sign-out fa-3x' : 'fa fa-sign-in fa-3x' 
+    const signClass = this.props.signed ? 'fa fa-sign-out fa-2x' : 'fa fa-sign-in fa-2x' 
 
     return (
       <div className="app-loader">
@@ -123,10 +127,24 @@ class AsyncApp extends Component {
         { 
           // signin or signout button
           <span className='signin'>
-              <i 
-                  className={signClass}
-                  aria-hidden='true' 
-                  onClick={this.props.signed ? this._onSignOut.bind(this) : this._onSignIn.bind(this)}/>
+            <div className="signin-icon">
+                <i 
+                    className={signClass}
+                    aria-hidden='true' 
+                    onClick={this.props.signed ? this._onSignOut.bind(this) : this._onSignIn.bind(this)}/>
+            </div>
+            <div>
+            {
+              this.props.username &&
+                <span>
+                    <span>Howdy </span> 
+                    <span>
+                      {this.props.username.split(' ')[0]}
+                    </span>
+                    <span> !</span>
+                </span>
+            }
+            </div>
           </span>
         }
         {
@@ -163,6 +181,8 @@ const mapStateToProps = (state) => {
 
   const signed = state.user.isSigned
   const auth = state.user.auth
+  const username = state.user.info ? state.user.info.name : null
+  const selectedColor = state.selectedColor
 
   return {
     // selectedSubreddit,
@@ -171,6 +191,8 @@ const mapStateToProps = (state) => {
     lastUpdated,
     signed,
     auth,
+    username,
+    selectedColor,
   }
 }
 

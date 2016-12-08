@@ -2,9 +2,10 @@ import { combineReducers } from 'redux'
 import {
   SELECT_SUBREDDIT, INVALIDATE_SUBREDDIT,
   REQUEST_POSTS, RECEIVE_POSTS,
-  REQUEST_PRODUCTS, RECEIVE_PRODUCTS,
+  REQUEST_PRODUCTS, RECEIVE_PRODUCTS, INVALIDATE_PRODUCTS,
   SET_CURRENT_PRODUCT, SET_CURRENT_PAGE, INCREMENT_PAGE,
-  SIGNIN, SIGNED
+  SIGNIN, SIGNED,
+  SET_CURRENT_COLOR,
 } from './actions'
 
 function user(state = {
@@ -80,6 +81,15 @@ function selectedSubreddit(state = 'reactjs', action) {
   }
 }
 
+function selectedColor(state = null, action) {
+  switch (action.type) {
+    case SET_CURRENT_COLOR:
+      return action.color
+    default:
+      return state
+  }
+}
+
 function posts(state = {
   isFetching: false,
   didInvalidate: false,
@@ -107,27 +117,32 @@ function posts(state = {
   }
 }
 
+
 function allProducts(state = {
     isFetching: false,
     didInvalidate: false,
     items: []
 }, action) {
     switch (action.type) {
-        case REQUEST_PRODUCTS:
-            return Object.assign({}, state, {
-                isFetching: true,
-                didInvalidate: false,
-                items: []
-            })
-        case RECEIVE_PRODUCTS:
-            return Object.assign({}, state, {
-                isFetching: false,
-                didInvalidate: false,
-                items: action.products,
-                lastUpdated: action.receivedAt
-            })
-        default:
-            return state
+      case INVALIDATE_PRODUCTS:
+        return Object.assign({}, state, {
+          didInvalidate: true
+        })
+      case REQUEST_PRODUCTS:
+        return Object.assign({}, state, {
+          isFetching: true,
+          didInvalidate: false,
+          items: []
+        })
+      case RECEIVE_PRODUCTS:
+        return Object.assign({}, state, {
+          isFetching: false,
+          didInvalidate: false,
+          items: action.products,
+          lastUpdated: action.receivedAt
+        })
+      default:
+        return state
     }
 }
 
@@ -158,9 +173,11 @@ const rootReducer = combineReducers({
   // postsBySubreddit,
 //   selectedSubreddit,
   allProducts,
+  // productsByColor,
   currentProduct,
   currentPage,
   user,
+  selectedColor,
   // signin,
   // signed,
 })

@@ -21,6 +21,7 @@ a {
 }
 */
 
+
 .loading-spinner {
   display: flex;
   justify-content: center;
@@ -42,16 +43,21 @@ a {
 
 .image-gallery-slide .image-gallery-description {
   line-height: 1.5;
+  bottom: 25px;
 }
 
 .signin {
   position: absolute;
-  top: 0px;
+  top: 25px;
   right: 0px;
   z-index: 3;
   color: #FFFFFF;
   padding: 5px 10px 5px 10px;
   background: rgba(0, 0, 0, 0.4);
+}
+
+.signin-icon {
+  float: right;
 }
 
 .signin-panel-background {
@@ -76,7 +82,7 @@ a {
 
 .signin-panel-close {
   position: absolute;
-  top: 0px;
+  top: 25px;
   left: 0px;
   color: #FFFFFF;
   padding: 5px 10px 5px 10px;
@@ -84,4 +90,20 @@ a {
 
 .signin-google {
   margin: 5px;
+}
+
+.palette {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 3;
+}
+
+.swatch {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border: solid 1px #FFFFFF;
+  border-radius: 50px;
+  margin: 2px;
 }
