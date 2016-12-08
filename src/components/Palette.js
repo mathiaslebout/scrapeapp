@@ -67,7 +67,7 @@ class Palette extends Component {
         // window.tracking.track('.productImage', colors);                
     }
 
-    _buildSwatched() {
+    _buildSwatches() {
         let swatches = []
         if (!this.props.palette) 
             return swatches
@@ -101,7 +101,7 @@ class Palette extends Component {
     }
 
     render() {
-        let swatches = this._buildSwatched()
+        let swatches = this._buildSwatches()
 
         return (
             <div className="palette">
@@ -109,6 +109,10 @@ class Palette extends Component {
             </div>
         )
     }
+}
+
+Palette.propTypes = {
+    palette: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => {

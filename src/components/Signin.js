@@ -2,9 +2,22 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import { signin, signed } from '../actions'
 
+
 class Signin extends Component {
 
-    componentDidMount() {
+    onLoadCallback() {
+        console.log('gapi load callback')
+
+    }
+
+    componentWillMount() {
+
+    }
+
+    onLoadedGapi() {
+        if (!window.gapi) 
+            return
+            
         window.gapi.signin2.render('my-signin2', {
             'scope': 'profile email',
             'width': 250,
@@ -13,7 +26,17 @@ class Signin extends Component {
             'theme': 'light',   // 'dark'
             'onsuccess': this.onGoogleSuccess.bind(this),
             'onfailure': this.onGoogleFailure.bind(this)
-        });    
+        })        
+    }
+
+    componentDidMount() {
+        const googleScriptElt = document.createElement('script')
+
+        googleScriptElt.id = 'google-login'
+        googleScriptElt.src = 'https://apis.google.com/js/platform.js'
+        googleScriptElt.onload = this.onLoadedGapi.bind(this)
+
+        document.body.appendChild(googleScriptElt)
 
         window.fbAsyncInit = function() {
             window.FB.init({
