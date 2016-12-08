@@ -46,6 +46,12 @@ a {
   bottom: 25px;
 }
 
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
 .signin {
   position: absolute;
   top: 25px;
