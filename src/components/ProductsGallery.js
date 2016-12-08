@@ -135,6 +135,12 @@ class ProductsGallery extends React.Component {
                 // product description
                 item.description &&
                 <span className='image-gallery-description'>
+                    {
+                        this.props.signed &&
+                        <span>
+                            {item.shop}&nbsp;/&nbsp;
+                        </span>
+                    }
                     <a href={item.href} target='_blank'>
                         {item.description}                        
                     </a>
@@ -185,6 +191,7 @@ class ProductsGallery extends React.Component {
                 price: product.price,
                 sizes: product.sizes,
                 palette: product.palette,
+                shop: product.shop,
                 // onSignIn
             }
         })
