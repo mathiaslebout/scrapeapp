@@ -121,7 +121,9 @@ function posts(state = {
 function allProducts(state = {
     isFetching: false,
     didInvalidate: false,
-    items: []
+    items: [],
+    prevItems: [],
+    prevCurrentProduct: null,
 }, action) {
     switch (action.type) {
       case INVALIDATE_PRODUCTS:
@@ -139,6 +141,8 @@ function allProducts(state = {
           isFetching: false,
           didInvalidate: false,
           items: action.products,
+          prevItems: action.prevProducts,
+          prevCurrentProduct: action.prevCurrentProduct,
           lastUpdated: action.receivedAt
         })
       default:

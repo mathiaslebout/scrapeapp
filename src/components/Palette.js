@@ -33,9 +33,9 @@ class Palette extends Component {
         // const tinyColor = tinycolor(hexColor)
         // const rgbColor = tinyColor.toRgb()
 
-        this.props.dispatch(setCurrentPage(0))
+        // this.props.dispatch(setCurrentPage(0))
         if (this.props.selectedColor) {
-            this.props.dispatch(invalidateProducts())
+            // this.props.dispatch(invalidateProducts())
             this.props.dispatch(setCurrentColor(null))
 
         }  else {

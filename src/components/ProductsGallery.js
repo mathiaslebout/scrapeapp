@@ -19,9 +19,20 @@ class ProductsGallery extends Component {
     componentDidMount() {
         const { currentProduct } = this.props
 
-        if (currentProduct >= this.props.products.length) 
-            this._imageGallery.slideToIndex(0)
+        // if (currentProduct >= this.props.products.length) {
+        //     this._imageGallery.slideToIndex(0)
+        // } else {
+        //     //this._imageGallery.slideToIndex(currentProduct)
+        // }
     }    
+
+    componentDidUpdate() {
+        const { selectedColor, currentProduct } = this.props
+
+        if (!selectedColor) {
+            this._imageGallery.slideToIndex(currentProduct)
+        }
+    }
 
     shouldComponentUpdate(nextProps, nextState) {
         return true;
@@ -109,7 +120,7 @@ ProductsGallery.propTypes = {
 }
 
 const mapStateToProps = (state) => {
-    const startIndex = state.currentProduct
+    const startIndex = state.selectedColor ? 0 : state.currentProduct
     const products = state.allProducts.items
     const signing = state.user.isSigning
     const signed = state.user.isSigned
