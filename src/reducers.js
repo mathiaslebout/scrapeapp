@@ -34,14 +34,14 @@ function user(state = {
   }
 }
 
-function currentProduct(state = 0, action) {
-  switch (action.type) {
-    case SET_CURRENT_PRODUCT:
-      return action.index
-    default:
-      return state
-  }
-}
+// function currentProduct(state = 0, action) {
+//   switch (action.type) {
+//     case SET_CURRENT_PRODUCT:
+//       return action.index
+//     default:
+//       return state
+//   }
+// }
 
 function currentPage(state = 0, action) {
   switch (action.type) {
@@ -118,11 +118,12 @@ function posts(state = {
 }
 
 
-function allProducts(state = {
+function products(state = {
     isFetching: false,
     didInvalidate: false,
     items: [],
     prevItems: [],
+    currentProduct: 0,
     prevCurrentProduct: null,
 }, action) {
     switch (action.type) {
@@ -144,6 +145,10 @@ function allProducts(state = {
           prevItems: action.prevProducts,
           prevCurrentProduct: action.prevCurrentProduct,
           lastUpdated: action.receivedAt
+        })
+      case SET_CURRENT_PRODUCT:
+        return Object.assign({}, state, {
+          currentProduct: action.index
         })
       default:
         return state
@@ -167,23 +172,17 @@ function productsByShop(state = {}, action) {
     switch (action.type) {
         case RECEIVE_PRODUCTS:
         case REQUEST_PRODUCTS: 
-            return Object.assign({}, state, { products: allProducts(state, action) } )
+            return Object.assign({}, state, { products: products(state, action) } )
         default:
             return state
     }
 }
 
 const rootReducer = combineReducers({
-  // postsBySubreddit,
-//   selectedSubreddit,
-  allProducts,
-  // productsByColor,
-  currentProduct,
+  products,
   currentPage,
   user,
   selectedColor,
-  // signin,
-  // signed,
 })
 
 export default rootReducer

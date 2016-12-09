@@ -121,11 +121,11 @@ ProductsGallery.propTypes = {
 
 const mapStateToProps = (state) => {
     const startIndex = state.selectedColor ? 0 : state.currentProduct
-    const products = state.allProducts.items
+    const products = state.products.items
+    const currentProduct = state.products.currentProduct
     const signing = state.user.isSigning
     const signed = state.user.isSigned
     const selectedColor = state.selectedColor
-    const currentProduct = state.currentProduct
 
     return {
         startIndex,

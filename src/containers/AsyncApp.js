@@ -165,17 +165,10 @@ AsyncApp.propTypes = {
 const mapStateToProps = (state) => {
   // const { selectedSubreddit, postsBySubreddit } = state
 
-  // allProducts is a Redux reducer defined in reducers.js
-  const { allProducts } = state
-  const {
-    isFetching,
-    lastUpdated,
-    items: products,
-  } = allProducts || {
-    isFetching: true,
-    items: []    
-  }
-
+  // products is a Redux reducer defined in reducers.js
+  const products = state.products.items
+  const isFetching = state.products.isFetching
+  const lastUpdated = state.products.lastUpdated
   const signed = state.user.isSigned
   const auth = state.user.auth
   const username = state.user.info ? state.user.info.name : null

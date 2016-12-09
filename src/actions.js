@@ -8,8 +8,8 @@ export const INVALIDATE_SUBREDDIT = 'INVALIDATE_SUBREDDIT'
 export const REQUEST_PRODUCTS = 'REQUEST_PRODUCTS'
 export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS'
 export const INVALIDATE_PRODUCTS = 'INVALIDATE_PRODUCTS'
-
 export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
+
 export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE'
 export const INCREMENT_PAGE = 'INCREMENT_PAGE'
 
@@ -140,7 +140,7 @@ function fetchProducts(state) {
             })
             .then(response => response.json())
             .then(json => {
-              dispatch(receiveProducts(json, state.allProducts.didInvalidate ? [] : state.allProducts.items, false))
+              dispatch(receiveProducts(json, state.products.didInvalidate ? [] : state.products.items, false))
             })
     }
 }
@@ -152,7 +152,7 @@ function fetchProductsByColor(state) {
     let baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
     return fetch(`${baseUrl}/store/color/${state.selectedColor.substring(1)}`, )
       .then(response => response.json())
-      .then(json => dispatch(receiveProducts(json, state.allProducts.items, true, state.currentProduct)))
+      .then(json => dispatch(receiveProducts(json, state.products.items, true, state.products.currentProduct)))
   }
 }
 
@@ -167,26 +167,26 @@ function shouldFetchPosts(state, subreddit) {
   }
 }
 
-function restorePreviousProducts(allProducts) {
+function restorePreviousProducts(products) {
   return {
     type: RECEIVE_PRODUCTS,
-    products: allProducts.prevItems,
+    products: products.prevItems,
     prevProducts: [],    
-    receivedAt: allProducts.lastUpdated
+    receivedAt: products.lastUpdated
   }  
 }
 
 function shouldFetchProducts(dispatch, state) {
-    const products = state.allProducts
+    const products = state.products
     if (state.selectedColor) {
         return false      
     } else if (products.prevItems.length != 0) {
-        dispatch(restorePreviousProducts(state.allProducts))
-        dispatch(setCurrentProduct(state.allProducts.prevCurrentProduct))
+        dispatch(restorePreviousProducts(state.products))
+        dispatch(setCurrentProduct(state.products.prevCurrentProduct))
         return false
     } else if (!products || !products.items || products.items.length === 0) {
         return true
-    } else if (products.items.length === state.currentProduct + 5) {
+    } else if (products.items.length === state.products.currentProduct + 5) {
         dispatch(incrementPage(state.currentPage))
         return true        
     } else if (products.isFetching) {
