@@ -2,31 +2,31 @@ import React, { PropTypes, Component } from 'react'
 import ImageGallery from 'react-image-gallery'
 import Palette from './Palette'
 // import GoogleLogin from './GoogleLogin'
-import { setCurrentProduct, fetchProductsIfNeeded, signin, signed } from '../actions'
+import { setCurrentProduct, fetchProductsIfNeeded } from '../actions'
 import { connect } from 'react-redux'
 
 // flexbox
 // https://philipwalton.github.io/solved-by-flexbox/
 
 
-class ProductsGallery extends React.Component {
-    constructor(props) {
-        super(props)
-    }
+class ProductsGallery extends Component {
+    // constructor(props) {
+    //     super(props)
+    // }
 
     handleImageLoad(event) {
         console.log('Image loaded ', event.target)
     }
 
     componentDidMount() {
-        const { dispatch, currentProduct } = this.props
+        const { currentProduct } = this.props
 
         if (currentProduct >= this.props.products.length) 
             this._imageGallery.slideToIndex(0)
     }    
 
     _renderItem(item) {
-        const onImageError = this.props.onImageError || this._handleImageError
+        // const onImageError = this.props.onImageError || this._handleImageError
 
         return (
             <div className='image-gallery-image'>
@@ -72,7 +72,7 @@ class ProductsGallery extends React.Component {
             {
                 this.props.signed &&
                 <Palette 
-                    palette = {item.palette}
+                    palette={item.palette}
                     />
             }
         </div>

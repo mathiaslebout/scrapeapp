@@ -169,7 +169,7 @@ function shouldFetchProducts(dispatch, state) {
       return false      
     } if (!products || !products.items || products.items.length === 0) {
         return true
-    } else if (products.items.length == state.currentProduct + 5) {
+    } else if (products.items.length === state.currentProduct + 5) {
         dispatch(incrementPage(state.currentPage))
         return true        
     } else if (products.isFetching) {

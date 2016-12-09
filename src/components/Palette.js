@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import convert from 'color-convert'
 import DeltaE from 'delta-e'
-import tinycolor from 'tinycolor2'
+// import tinycolor from 'tinycolor2'
 // import tracking from 'tracking'
 
 import { setCurrentPage, setCurrentColor, invalidateProducts } from '../actions'
@@ -30,8 +30,8 @@ class Palette extends Component {
     }
 
     onSwatchClick(hexColor) {
-        const tinyColor = tinycolor(hexColor)
-        const rgbColor = tinyColor.toRgb()
+        // const tinyColor = tinycolor(hexColor)
+        // const rgbColor = tinyColor.toRgb()
 
         this.props.dispatch(setCurrentPage(0))
         if (this.props.selectedColor) {

@@ -1,20 +1,17 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
-import { selectSubreddit, fetchPostsIfNeeded, invalidateSubreddit, fetchProductsIfNeeded, fetchProductsBC, signin, signed } from '../actions'
-import Picker from '../components/Picker'
-import Posts from '../components/Posts'
-import Products from '../components/Products'
+import { fetchProductsIfNeeded, fetchProductsBC, signin, signed } from '../actions'
 import ProductsGallery from '../components/ProductsGallery'
 import Signin from '../components/Signin'
 
 import "../../node_modules/react-image-gallery/styles/css/image-gallery.css";
 
 class AsyncApp extends Component {
-  constructor(props) {
-    super(props)
-    // this.handleChange = this.handleChange.bind(this)
-    // this.handleRefreshClick = this.handleRefreshClick.bind(this)
-  }
+  // constructor(props) {
+  //   super(props)
+  //   // this.handleChange = this.handleChange.bind(this)
+  //   // this.handleRefreshClick = this.handleRefreshClick.bind(this)
+  // }
 
   componentDidMount() {
     // const { dispatch, selectedSubreddit, } = this.props
@@ -25,7 +22,7 @@ class AsyncApp extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedColor != this.props.selectedColor) {
+    if (nextProps.selectedColor !== this.props.selectedColor) {
       const { dispatch, selectedColor } = nextProps
       selectedColor ? dispatch(fetchProductsBC()) : dispatch(fetchProductsIfNeeded())
     }
@@ -81,7 +78,7 @@ class AsyncApp extends Component {
 
   render() {
     // const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
-    const { products, isFetching, lastUpdated} = this.props
+    const { products, isFetching } = this.props
     const signClass = this.props.signed ? 'fa fa-sign-out fa-2x' : 'fa fa-sign-in fa-2x' 
 
     return (
