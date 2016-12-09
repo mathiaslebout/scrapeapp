@@ -29,15 +29,8 @@ class Signin extends Component {
         })        
     }
 
-    componentDidMount() {
-        const googleScriptElt = document.createElement('script')
-
-        googleScriptElt.id = 'google-login'
-        googleScriptElt.src = 'https://apis.google.com/js/platform.js'
-        googleScriptElt.onload = this.onLoadedGapi.bind(this)
-
-        document.body.appendChild(googleScriptElt)
-
+    onLoadedFB() {
+        // append callback        
         window.fbAsyncInit = function() {
             window.FB.init({
                 appId      : '{617494655102277}',
@@ -47,7 +40,7 @@ class Signin extends Component {
             })
 
             // check FB login status on start
-            window.FB.getLoginStatus((response) => {
+            window.FB.getLoginStatus(function (response) {
                 this.statusChangeCallback(response)
             })
 
@@ -55,6 +48,22 @@ class Signin extends Component {
             // window.FB.Event.subscribe('auth.logout', this.statusChangeCallback.bind(this));
             window.FB.Event.subscribe('auth.statusChange', this.statusChangeCallback.bind(this));            
         }.bind(this)        
+    }
+
+    componentDidMount() {
+        // append Google platform JS
+        const googleScriptElt = document.createElement('script')
+        googleScriptElt.id = 'google-login'
+        googleScriptElt.src = 'https://apis.google.com/js/platform.js'
+        googleScriptElt.onload = this.onLoadedGapi.bind(this)
+        document.body.appendChild(googleScriptElt)
+
+        // append Facebook
+        const facebookScriptElt = document.createElement('script')
+        facebookScriptElt.id = 'facebook-jssdk'
+        facebookScriptElt.src = 'https://connect.facebook.net/it_IT/sdk.js#xfbml=1&version=v2.8&appId=617494655102277'
+        facebookScriptElt.onload = this.onLoadedFB.bind(this)
+        document.body.appendChild(facebookScriptElt)
     }
     
     onGoogleSuccess(googleUser) {
