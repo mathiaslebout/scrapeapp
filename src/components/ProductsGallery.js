@@ -1,13 +1,11 @@
 import React, { PropTypes, Component } from 'react'
 import ImageGallery from 'react-image-gallery'
-import Palette from './Palette'
-// import GoogleLogin from './GoogleLogin'
+import Product from './Product'
 import { setCurrentProduct, fetchProductsIfNeeded } from '../actions'
 import { connect } from 'react-redux'
 
 // flexbox
 // https://philipwalton.github.io/solved-by-flexbox/
-
 
 class ProductsGallery extends Component {
     // constructor(props) {
@@ -25,57 +23,17 @@ class ProductsGallery extends Component {
             this._imageGallery.slideToIndex(0)
     }    
 
+    shouldComponentUpdate(nextProps, nextState) {
+        return true;
+    }
+
     _renderItem(item) {
         // const onImageError = this.props.onImageError || this._handleImageError
 
         return (
-            <div className='image-gallery-image'>
-                <img
-                    className="productImage"
-                    // crossOrigin="Anonymous"
-                    src={item.original}
-                    // width='150px !important'
-                    // max-width='150px'
-                    alt={item.originalAlt}
-                    srcSet={item.srcSet}
-                    sizes={item.sizes}
-                    onLoad={this.props.onImageLoad}
-                    // onError={onImageError.bind(this)}
+            <Product
+                product={item}
                 />
-            {
-                // product description
-                item.description &&
-                <span className='image-gallery-description'>
-                    {
-                        this.props.signed &&
-                        <span>
-                            {item.shop}&nbsp;/&nbsp;
-                        </span>
-                    }
-                    <a href={item.href} target='_blank'>
-                        {item.description}                        
-                    </a>
-                    {
-                        this.props.signed &&
-                        <div>
-                            Taglie: {item.sizes.join(',')}
-                        </div>
-                    }
-                    {
-                        this.props.signed &&
-                        <div>
-                            Prezzo: {item.price} euro
-                        </div>
-                    }
-                </span>
-            }
-            {
-                this.props.signed &&
-                <Palette 
-                    palette={item.palette}
-                    />
-            }
-        </div>
         )
     }    
 
