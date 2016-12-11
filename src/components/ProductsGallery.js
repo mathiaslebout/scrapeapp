@@ -17,26 +17,24 @@ class ProductsGallery extends Component {
     }
 
     componentDidMount() {
-        const { currentProduct } = this.props
-
-        // if (currentProduct >= this.props.products.length) {
-        //     this._imageGallery.slideToIndex(0)
-        // } else {
-        //     //this._imageGallery.slideToIndex(currentProduct)
-        // }
-    }    
-
-    componentDidUpdate() {
         const { selectedColor, currentProduct } = this.props
 
         if (!selectedColor) {
             this._imageGallery.slideToIndex(currentProduct)
-        }
+        } 
+    }    
+
+    componentDidUpdate() {
+        // const { selectedColor, currentProduct } = this.props
+
+        // if (!selectedColor) {
+        //     this._imageGallery.slideToIndex(currentProduct)
+        // }
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
-        return true;
-    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return true;
+    // }
 
     _renderItem(item) {
         // const onImageError = this.props.onImageError || this._handleImageError
@@ -62,6 +60,7 @@ class ProductsGallery extends Component {
 
             return {
                 index: i,
+                _id: product._id,
                 original: imgHref,
                 // thumbnail: imgHref,
                 originalClass: 'featured-slide',
@@ -100,7 +99,7 @@ class ProductsGallery extends Component {
             ref={i => this._imageGallery = i}
             items={images}
             slideInterval={2000}
-            onImageLoad={this.handleImageLoad}
+            onImageLoad={this.handleImageLoad.bind(this)}
             renderItem={this._renderItem.bind(this)}
             showFullscreenButton={false}
             onSlide={this._onSlide.bind(this)}

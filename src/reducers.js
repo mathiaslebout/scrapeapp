@@ -6,6 +6,7 @@ import {
   SET_CURRENT_PRODUCT, SET_CURRENT_PAGE, INCREMENT_PAGE,
   SIGNIN, SIGNED,
   SET_CURRENT_COLOR,
+  REQUEST_AVERAGE_COLOR, RECEIVE_AVERAGE_COLOR, RESET_AVERAGE_COLOR
 } from './actions'
 
 function user(state = {
@@ -84,6 +85,19 @@ function selectedSubreddit(state = 'reactjs', action) {
 function selectedColor(state = null, action) {
   switch (action.type) {
     case SET_CURRENT_COLOR:
+      return action.color
+    default:
+      return state
+  }
+}
+
+function averageColor(state = null, action) {
+  switch (action.type) {
+    case RESET_AVERAGE_COLOR:
+      return null
+    case REQUEST_AVERAGE_COLOR:
+      return state
+    case RECEIVE_AVERAGE_COLOR:
       return action.color
     default:
       return state
@@ -183,6 +197,7 @@ const rootReducer = combineReducers({
   currentPage,
   user,
   selectedColor,
+  averageColor,
 })
 
 export default rootReducer

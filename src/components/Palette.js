@@ -4,8 +4,9 @@ import convert from 'color-convert'
 import DeltaE from 'delta-e'
 // import tinycolor from 'tinycolor2'
 // import tracking from 'tracking'
+import Swipeable from 'react-swipeable'
 
-import { setCurrentPage, setCurrentColor, invalidateProducts } from '../actions'
+import { setCurrentPage, setCurrentColor, invalidateProducts, resetAverageColor } from '../actions'
 
 class Palette extends Component {
 
@@ -67,8 +68,15 @@ class Palette extends Component {
         // window.tracking.track('.productImage', colors);                
     }
 
+    onSwipedAverageColor(event) {
+        if (this.props.averageColor !== this.props.selectedColor) {
+            this.props.dispatch(resetAverageColor())
+        }
+    }
+
     _buildSwatches() {
         let swatches = []
+        let averageSwatches = []
         if (!this.props.palette) 
             return swatches
 
@@ -97,15 +105,53 @@ class Palette extends Component {
             swatches.push(s)
         }
 
-        return swatches
+        if (this.props.averageColor) {
+            const labColor = convert.hex.lab(this.props.averageColor.substring(1))
+            
+            let dE = 100
+            if (this.props.selectedColor) {
+                const pColor = this.props.selectedColor.substring(1)
+                const pLabColor = convert.hex.lab(pColor)
+
+                dE = DeltaE.getDeltaE76({L: labColor[0], A: labColor[1], B: labColor[2]}, {L: pLabColor[0], A: pLabColor[1], B: pLabColor[2]})
+            }
+            
+            const s = <span 
+                className="swatch" 
+                key='averageColor'
+                style={{ 
+                    background: this.props.averageColor, 
+                    borderColor: dE < 10 ? '#F00' : '#FFF',
+                    opacity: this.props.selectedColor && dE >= 10 ? 0.05 : 1
+                }}
+                onClick={this.onSwatchClick.bind(this, this.props.averageColor)}
+                // onDoubleClick={this.onDoubleClickHandler.bind(this)}
+                />
+            averageSwatches.push(s)
+        }
+
+        return { swatches, averageSwatches }
     }
 
     render() {
-        let swatches = this._buildSwatches()
+        const { swatches, averageSwatches } = this._buildSwatches()
 
         return (
-            <div className="palette">
-                {swatches}
+            <div>
+                <div className="palette">
+                    {swatches}
+                </div>
+                <Swipeable 
+                    // style={{margin: '30px'}}
+                    delta={1}
+                    className="averageColor-palette"
+                    onSwiped={this.onSwipedAverageColor.bind(this)}
+                    // onSwipeDown={this.onDoubleClickHandler.bind(this)}
+                    // trackMouse={true}
+                    // stopPropagation={true}
+                    >                
+                    {averageSwatches}
+                </Swipeable>
             </div>
         )
     }
@@ -116,10 +162,11 @@ Palette.propTypes = {
 }
 
 const mapStateToProps = (state) => {
-    const { selectedColor } = state
+    const { selectedColor, averageColor } = state
 
     return {
-        selectedColor
+        selectedColor,
+        averageColor,
     }
 }
 

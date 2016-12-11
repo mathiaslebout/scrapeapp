@@ -15,8 +15,13 @@ export const INCREMENT_PAGE = 'INCREMENT_PAGE'
 
 export const SET_CURRENT_COLOR = 'SET_CURRENT_COLOR'
 
+export const REQUEST_AVERAGE_COLOR = 'REQUEST_AVERAGE_COLOR'
+export const RECEIVE_AVERAGE_COLOR = 'RECEIVE_AVERAGE_COLOR'
+export const RESET_AVERAGE_COLOR = 'RESET_AVERAGE_COLOR'
+
 export const SIGNIN = 'SIGNIN'
 export const SIGNED = 'SIGNED'
+
 
 export function setCurrentColor(color) {
   return {
@@ -93,6 +98,38 @@ function requestProducts() {
     return {
         type: REQUEST_PRODUCTS
     }
+}
+
+function requestAverageColor() {
+  return {
+    type: REQUEST_AVERAGE_COLOR
+  }
+}
+
+function receiveAverageColor(color) {
+  return {
+    type: RECEIVE_AVERAGE_COLOR,
+    color
+  }
+}
+
+export function resetAverageColor() {
+  return {
+    type: RESET_AVERAGE_COLOR
+  }
+}
+
+export function fetchAverageColor(productId, imgPoint, imgDim) {
+  return dispatch => {
+    dispatch(requestAverageColor())
+
+    const baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
+    return fetch(`${baseUrl}/average/${productId}/${imgPoint.x}-${imgPoint.y}/${imgDim.width}-${imgDim.height}`)
+      .then(response => response.json())
+      .then(json => {
+        dispatch(receiveAverageColor(json))
+      })
+  }  
 }
 
 function receivePosts(subreddit, json) {
@@ -209,7 +246,6 @@ export function fetchProductsBC() {
     return dispatch(fetchProductsByColor(getState()))
   }
 }
-
 
 export function fetchProductsIfNeeded() {
     return (dispatch, getState) => {
