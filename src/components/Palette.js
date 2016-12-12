@@ -69,7 +69,7 @@ class Palette extends Component {
     }
 
     onSwipedAverageColor(event) {
-        if (this.props.averageColor !== this.props.selectedColor) {
+        if (this.props.averageColor.color !== this.props.selectedColor) {
             this.props.dispatch(resetAverageColor())
         }
     }
@@ -105,8 +105,8 @@ class Palette extends Component {
             swatches.push(s)
         }
 
-        if (this.props.averageColor) {
-            const labColor = convert.hex.lab(this.props.averageColor.substring(1))
+        if (this.props.averageColor.color) {
+            const labColor = convert.hex.lab(this.props.averageColor.color.substring(1))
             
             let dE = 100
             if (this.props.selectedColor) {
@@ -120,15 +120,15 @@ class Palette extends Component {
                 className="swatch" 
                 key='averageColor'
                 style={{ 
-                    background: this.props.averageColor, 
+                    background: this.props.averageColor.color, 
                     borderColor: dE < 10 ? '#F00' : '#FFF',
                     opacity: this.props.selectedColor && dE >= 10 ? 0.05 : 1
                 }}
-                onClick={this.onSwatchClick.bind(this, this.props.averageColor)}
+                onClick={this.onSwatchClick.bind(this, this.props.averageColor.color)}
                 // onDoubleClick={this.onDoubleClickHandler.bind(this)}
                 />
             averageSwatches.push(s)
-        }
+        } 
 
         return { swatches, averageSwatches }
     }
@@ -137,10 +137,16 @@ class Palette extends Component {
         const { swatches, averageSwatches } = this._buildSwatches()
 
         return (
-            <div>
+            <div>            
                 <div className="palette">
                     {swatches}
                 </div>
+                {
+                    this.props.averageColor.isFetching &&
+                    <div className="palette-average-fetching">
+                        <span>Sto analizzando il colore...</span>
+                    </div>
+                }
                 <Swipeable 
                     // style={{margin: '30px'}}
                     delta={1}

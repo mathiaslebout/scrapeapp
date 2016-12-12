@@ -91,14 +91,25 @@ function selectedColor(state = null, action) {
   }
 }
 
-function averageColor(state = null, action) {
+function averageColor(state = {
+  isFetching: false,
+  color: null
+}, action) {
   switch (action.type) {
     case RESET_AVERAGE_COLOR:
-      return null
+      return Object.assign({}, state, {
+        isFetching: false,
+        color: null
+      })
     case REQUEST_AVERAGE_COLOR:
-      return state
+      return Object.assign({}, state, {
+        isFetching: true
+      })
     case RECEIVE_AVERAGE_COLOR:
-      return action.color
+      return Object.assign({}, state, {
+        isFetching: false,
+        color: action.color
+      })
     default:
       return state
   }

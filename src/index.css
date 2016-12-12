@@ -106,6 +106,15 @@ a {
   /*z-index: 3;*/
 }
 
+.palette-average-fetching {
+  position: absolute;
+  top: 25%;
+  right: 0px;
+  color: #FFFFFF;
+  background-color: rgba(0, 0, 0, 0.4);
+  padding: 20px;
+}
+
 .averageColor-palette {
   position: absolute;
   bottom: 150px;
