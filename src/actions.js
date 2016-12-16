@@ -1,5 +1,8 @@
 import fetch from 'isomorphic-fetch'
 
+const devServerBaseUrl = 'http://localhost:8082'
+const prodServerBaseUrl = 'http://scraper.site:8082'
+
 export const REQUEST_POSTS = 'REQUEST_POSTS'
 export const RECEIVE_POSTS = 'RECEIVE_POSTS'
 export const SELECT_SUBREDDIT = 'SELECT_SUBREDDIT'
@@ -123,7 +126,7 @@ export function fetchAverageColor(productId, imgPoint, imgDim) {
   return dispatch => {
     dispatch(requestAverageColor())
 
-    const baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
+    const baseUrl = process.env.NODE_ENV !== 'production' ? devServerBaseUrl : prodServerBaseUrl
     return fetch(`${baseUrl}/average/${productId}/${imgPoint.x}-${imgPoint.y}/${imgDim.width}-${imgDim.height}`)
       .then(response => response.json())
       .then(json => {
@@ -167,7 +170,7 @@ function fetchProducts(state) {
     return dispatch => {
         dispatch(requestProducts()) 
 
-        let baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
+        let baseUrl = process.env.NODE_ENV !== 'production' ? devServerBaseUrl : prodServerBaseUrl
         return fetch(`${baseUrl}/store/${state.currentPage}`, {                    
                 // mode: 'no-cors', 
                 // headers: {
@@ -186,7 +189,7 @@ function fetchProductsByColor(state) {
   return dispatch => {
     dispatch(requestProducts())
 
-    let baseUrl = process.env.NODE_ENV !== 'production' ? 'http://localhost:8082' : 'http://35.164.227.19:8082'
+    let baseUrl = process.env.NODE_ENV !== 'production' ? devServerBaseUrl : prodServerBaseUrl
     return fetch(`${baseUrl}/store/color/${state.selectedColor.substring(1)}`, )
       .then(response => response.json())
       .then(json => dispatch(receiveProducts(json, state.products.items, true, state.products.currentProduct)))

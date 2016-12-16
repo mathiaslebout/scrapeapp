@@ -82,27 +82,29 @@ class Palette extends Component {
 
         for (let swatch in this.props.palette) {
             const color = this.props.palette[swatch]
-            const labColor = convert.hex.lab(color)
+            if (color) {
+                const labColor = convert.hex.lab(color)
 
-            let dE = 100
-            if (this.props.selectedColor) {
-                const pColor = this.props.selectedColor.substring(1)
-                const pLabColor = convert.hex.lab(pColor)
+                let dE = 100
+                if (this.props.selectedColor) {
+                    const pColor = this.props.selectedColor.substring(1)
+                    const pLabColor = convert.hex.lab(pColor)
 
-                dE = DeltaE.getDeltaE76({L: labColor[0], A: labColor[1], B: labColor[2]}, {L: pLabColor[0], A: pLabColor[1], B: pLabColor[2]})
+                    dE = DeltaE.getDeltaE76({L: labColor[0], A: labColor[1], B: labColor[2]}, {L: pLabColor[0], A: pLabColor[1], B: pLabColor[2]})
+                }
+                
+                const s = <span 
+                    className="swatch" 
+                    key={swatch}
+                    style={{ 
+                        background: color, 
+                        borderColor: dE < 10 ? '#F00' : '#FFF',
+                        opacity: this.props.selectedColor && dE >= 10 ? 0.05 : 1
+                        }}
+                    onClick={this.onSwatchClick.bind(this, color)}
+                    />
+                swatches.push(s)
             }
-            
-            const s = <span 
-                className="swatch" 
-                key={swatch}
-                style={{ 
-                    background: color, 
-                    borderColor: dE < 10 ? '#F00' : '#FFF',
-                    opacity: this.props.selectedColor && dE >= 10 ? 0.05 : 1
-                    }}
-                onClick={this.onSwatchClick.bind(this, color)}
-                />
-            swatches.push(s)
         }
 
         if (this.props.averageColor.color) {
