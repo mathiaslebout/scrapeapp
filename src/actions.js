@@ -25,6 +25,14 @@ export const RESET_AVERAGE_COLOR = 'RESET_AVERAGE_COLOR'
 export const SIGNIN = 'SIGNIN'
 export const SIGNED = 'SIGNED'
 
+export const DISPLAY_FILTER_PANEL = 'DISPLAY_FILTER_PANEL'
+
+export function displayFilterPanel(display) {
+  return {
+    type: DISPLAY_FILTER_PANEL,
+    display
+  }
+}
 
 export function setCurrentColor(color) {
   return {

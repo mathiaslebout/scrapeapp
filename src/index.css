@@ -129,3 +129,62 @@ a {
   border-radius: 50px;
   margin: 2px;
 }
+
+.filter {
+  position: absolute;
+  bottom: 25px;
+  right: 0px;
+  z-index: 3;
+  color: #FFFFFF;
+}
+
+.filter-icon {
+  padding: 5px 10px 5px 10px;  
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: 0.9;  
+}
+
+.filter-panel {
+  width: 40vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 4;
+  right: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  opacity: .9;
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-panel-close {
+  position: absolute;
+  right: 0px;
+  color: #FFFFFF;
+  padding: 5px 10px 5px 10px;  
+}
+
+.filter-panel-appear {
+  opacity: 0.01;
+}
+
+.filter-panel-appear.filter-panel-appear-active {
+  opacity: .2;
+  transition: opacity 100ms ease-in;
+}
+
+input[type=checkbox] {
+  display:none;
+}
+input[type=checkbox] + label:before {
+  font-family: FontAwesome;
+  display: inline-block;
+}
+input[type=checkbox] + label:before { 
+  content: "\f096"; 
+  letter-spacing: 10px;
+} /* unchecked icon */
+input[type=checkbox]:checked + label:before { 
+  content: "\f046";
+  letter-spacing: 5px; 
+} /* checked icon */

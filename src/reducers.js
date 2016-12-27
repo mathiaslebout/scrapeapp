@@ -6,7 +6,8 @@ import {
   SET_CURRENT_PRODUCT, SET_CURRENT_PAGE, INCREMENT_PAGE,
   SIGNIN, SIGNED,
   SET_CURRENT_COLOR,
-  REQUEST_AVERAGE_COLOR, RECEIVE_AVERAGE_COLOR, RESET_AVERAGE_COLOR
+  REQUEST_AVERAGE_COLOR, RECEIVE_AVERAGE_COLOR, RESET_AVERAGE_COLOR,
+  DISPLAY_FILTER_PANEL,
 } from './actions'
 
 function user(state = {
@@ -203,12 +204,26 @@ function productsByShop(state = {}, action) {
     }
 }
 
+function filter(state = {
+    filterpanel: false
+  }, action) {
+    switch (action.type) {
+      case DISPLAY_FILTER_PANEL:
+        return Object.assign({}, state, {
+          filterpanel: action.display
+        })
+      default:
+        return state
+    }
+}
+
 const rootReducer = combineReducers({
   products,
   currentPage,
   user,
   selectedColor,
   averageColor,
+  filter,
 })
 
 export default rootReducer

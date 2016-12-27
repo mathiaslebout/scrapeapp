@@ -1,8 +1,10 @@
 import React, { Component, PropTypes } from 'react'
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import { connect } from 'react-redux'
-import { fetchProductsIfNeeded, fetchProductsBC, signin, signed } from '../actions'
+import { fetchProductsIfNeeded, fetchProductsBC, signin, signed, displayFilterPanel } from '../actions'
 import ProductsGallery from '../components/ProductsGallery'
 import Signin from '../components/Signin'
+import FilterPanel from '../components/FilterPanel'
 
 import "../../node_modules/react-image-gallery/styles/css/image-gallery.css";
 
@@ -76,6 +78,10 @@ class AsyncApp extends Component {
     }    
   }
 
+  _handleFilter() {
+    this.props.dispatch(displayFilterPanel(!this.props.filterpanel))
+  }
+
   render() {
     // const { selectedSubreddit, posts, isFetching, lastUpdated } = this.props
     const { products, isFetching } = this.props
@@ -123,6 +129,7 @@ class AsyncApp extends Component {
         }
         { 
           // signin or signout button
+          !this.props.filterpanel &&
           <span className='signin'>
             <div className="signin-icon">
                 <i 
@@ -146,6 +153,29 @@ class AsyncApp extends Component {
         }
         {
           <Signin/>
+        }
+        {
+          this.props.signed && 
+          !this.props.filterpanel &&
+          <span className="filter">
+            <div className="filter-icon">
+              <i 
+                className="fa fa-filter fa-2x" 
+                aria-hidden="true"
+                onClick={this._handleFilter.bind(this)}></i>
+            </div>
+          </span>
+        }
+        {
+          this.props.filterpanel &&
+          <ReactCSSTransitionGroup
+            transitionName="filter-panel"
+            transitionAppear={true}
+            transitionAppearTimeout={200}            
+            transitionEnterTimeout={200}
+            transitionLeaveTimeout={200}>
+            <FilterPanel />
+          </ReactCSSTransitionGroup>          
         }
         
       </div>
@@ -173,6 +203,7 @@ const mapStateToProps = (state) => {
   const auth = state.user.auth
   const username = state.user.info ? state.user.info.name : null
   const selectedColor = state.selectedColor
+  const filterpanel = state.filter.filterpanel
 
   return {
     // selectedSubreddit,
@@ -183,6 +214,7 @@ const mapStateToProps = (state) => {
     auth,
     username,
     selectedColor,
+    filterpanel,
   }
 }
 
